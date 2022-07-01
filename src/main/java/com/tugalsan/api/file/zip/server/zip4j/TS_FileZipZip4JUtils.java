@@ -7,6 +7,7 @@ import net.lingala.zip4j.exception.*;
 import com.tugalsan.api.file.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.list.client.*;
+import com.tugalsan.api.unsafe.client.*;
 
 public class TS_FileZipZip4JUtils {
 
@@ -31,39 +32,33 @@ public class TS_FileZipZip4JUtils {
         var zipFile = new ZipFile(targetZipFile.toAbsolutePath().toString());
         if (sourceFiles != null) {
             sourceFiles.stream().forEachOrdered(p -> {
-                if (p == null) {
-                    return;
-                }
-                try {
+                TGS_UnSafe.execute(() -> {
+                    if (p == null) {
+                        return;
+                    }
                     zipFile.addFile(p.toFile());
-                } catch (ZipException e) {
-                    throw new RuntimeException(e);
-                }
+                });
             });
         }
         if (sourceDirectories != null) {
             sourceDirectories.stream().forEachOrdered(p -> {
-                if (p == null) {
-                    return;
-                }
-                try {
+                TGS_UnSafe.execute(() -> {
+                    if (p == null) {
+                        return;
+                    }
                     zipFile.addFolder(p.toFile());
-                } catch (ZipException e) {
-                    throw new RuntimeException(e);
-                }
+                });
             });
         }
     }
 
     public static void unzip(Path sourceZipFile, Path destinationDirectory) {
-        try {
+        TGS_UnSafe.execute(() -> {
             d.ci("unzip", sourceZipFile, destinationDirectory);
 //            TS_DirectoryUtils.deleteDirectoryIfExists(destinationDirectory);//DONT!!!
             TS_DirectoryUtils.createDirectoriesIfNotExists(destinationDirectory);
             var zipFile = new ZipFile(sourceZipFile.toAbsolutePath().toString());
             zipFile.extractAll(destinationDirectory.toAbsolutePath().toString());
-        } catch (ZipException e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 }

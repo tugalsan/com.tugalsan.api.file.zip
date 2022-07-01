@@ -1,5 +1,6 @@
 package com.tugalsan.api.file.zip.server.jdk;
 
+import com.tugalsan.api.unsafe.client.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.zip.*;
@@ -8,21 +9,21 @@ import java.util.zip.*;
 public class TS_FileZipJDK_UnzipFile {
 
     public static void unzip(Path fileZip, Path destPath) {
-        try {
+        TGS_UnSafe.execute(() -> {
             var destDir = destPath.toFile();
             var buffer = new byte[1024];
             try ( var zis = new ZipInputStream(Files.newInputStream(fileZip))) {
-                var zipEntry = zis.getNextEntry();
-                while (zipEntry != null) {
+                ZipEntry zipEntry;
+                while ((zipEntry = zis.getNextEntry()) != null) {
                     var newFile = newFile(destDir, zipEntry);
                     if (zipEntry.isDirectory()) {
-                        if (!newFile.isDirectory() && !newFile.mkdirs()) {
-                            throw new IOException("Failed to create directory " + newFile);
+                        if (!newFile.mkdirs()) {
+                            TGS_UnSafe.catchMeIfUCan(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + newFile);
                         }
                     } else {
                         var parent = newFile.getParentFile();
                         if (!parent.isDirectory() && !parent.mkdirs()) {
-                            throw new IOException("Failed to create directory " + parent);
+                            TGS_UnSafe.catchMeIfUCan(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + parent);
                         }
 
                         try ( var fos = new FileOutputStream(newFile)) {
@@ -32,29 +33,24 @@ public class TS_FileZipJDK_UnzipFile {
                             }
                         }
                     }
-                    zipEntry = zis.getNextEntry();
+                    zis.closeEntry();
                 }
-                zis.closeEntry();
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
     /**
      * @see https://snyk.io/research/zip-slip-vulnerability
      */
-    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-        try {
+    public static File newFile(File destinationDir, ZipEntry zipEntry) {
+        return TGS_UnSafe.compile(() -> {
             var destFile = new File(destinationDir, zipEntry.getName());
             var destDirPath = destinationDir.getCanonicalPath();
             var destFilePath = destFile.getCanonicalPath();
             if (!destFilePath.startsWith(destDirPath + File.separator)) {
-                throw new RuntimeException("Entry is outside of the target dir: " + zipEntry.getName());
+                TGS_UnSafe.catchMeIfUCan(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "newFile", "Entry is outside of the target dir: " + zipEntry.getName());
             }
             return destFile;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 }

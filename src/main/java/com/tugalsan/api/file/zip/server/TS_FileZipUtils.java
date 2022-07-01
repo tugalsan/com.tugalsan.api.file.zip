@@ -59,8 +59,8 @@ public class TS_FileZipUtils {
             ZipEntry zEntry;
             while ((zEntry = zipIs.getNextEntry()) != null) {
                 list.add(zEntry.getName());
+                zipIs.closeEntry();
             }
-            zipIs.close();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
