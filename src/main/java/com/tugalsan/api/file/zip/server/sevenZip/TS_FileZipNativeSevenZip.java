@@ -9,7 +9,7 @@ import com.tugalsan.api.string.client.*;
 
 public class TS_FileZipNativeSevenZip {
 
-    final private static TS_Log d = TS_Log.of(TS_FileZipNativeSevenZip.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_FileZipNativeSevenZip.class);
 
     public static Path sevenZipExe = Path.of("C:\\Program Files\\7-Zip\\7z.exe");
 

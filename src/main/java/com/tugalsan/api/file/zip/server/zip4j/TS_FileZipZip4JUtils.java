@@ -11,7 +11,7 @@ import com.tugalsan.api.unsafe.client.*;
 
 public class TS_FileZipZip4JUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_FileZipZip4JUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_FileZipZip4JUtils.class);
 
     public static void zipFile(Path sourceFile, Path targetZipFile) {
         d.ci("zipFile", sourceFile, targetZipFile);

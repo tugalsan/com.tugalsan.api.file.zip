@@ -13,7 +13,7 @@ import com.tugalsan.api.file.zip.server.zip4j.*;
 
 public class TS_FileZipUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_FileZipUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_FileZipUtils.class);
 
     public static void zipFile(Path sourceFile, Path targetZipFile) {
         TS_FileZipZip4JUtils.zipFile(sourceFile, targetZipFile);

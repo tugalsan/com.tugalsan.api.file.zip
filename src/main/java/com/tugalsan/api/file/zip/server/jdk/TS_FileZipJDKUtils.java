@@ -13,7 +13,7 @@ import com.tugalsan.api.unsafe.client.*;
 @Deprecated
 public class TS_FileZipJDKUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_FileZipJDKUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_FileZipJDKUtils.class);
 
     private static class zipDirectory_DirectoryVisitor extends SimpleFileVisitor<Path> implements AutoCloseable {
 
