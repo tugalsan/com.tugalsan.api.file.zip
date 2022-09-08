@@ -20,7 +20,7 @@ public class TS_FileZipNativeSevenZip {
                 sourceFile.toAbsolutePath().toString(), "\""
         );
         d.ci("zipFile", "cmd", cmd);
-        TS_RuntimeUtils.execute(cmd);
+        TS_Process.of(cmd);
     }
 
     public static void zipList(List<Path> sourceFiles, Path targetZipFile) {//7z a -tzip DestinyTest.zip destiny1.txt destiny4.txt destiny6.txt
@@ -33,7 +33,7 @@ public class TS_FileZipNativeSevenZip {
                 targetZipFile.toAbsolutePath().toString(), "\" ", sb.toString()
         );
         d.ci("zipFile", "cmd", cmd);
-        TS_RuntimeUtils.execute(cmd);
+        TS_Process.of(cmd);
     }
 
     public static void zipFolder(Path sourceDirectory, Path targetZipFile) {//7z a myzip ./MyFolder/*
@@ -46,11 +46,11 @@ public class TS_FileZipNativeSevenZip {
                 targetZipFile.toAbsolutePath().toString(), "\"",
                 sourceDirectory.toAbsolutePath().toString(), "\\*\""
         ));
-        TS_RuntimeUtils.runConsoleBAT_readResult(driveLetter);
+        TS_Process.of(driveLetter);
     }
 
     public static void unzip(Path sourceZipFile, Path destinationDirectory) {//"C:\Program Files\7-Zip\7z.exe" x -y "D:\xampp\168063.zip" -o"d:\zip"
-        TS_RuntimeUtils.execute(TGS_StringUtils.concat(
+        TS_Process.of(TGS_StringUtils.concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" x -y \"",
                 sourceZipFile.toAbsolutePath().toString(), "\" -o\"",
                 destinationDirectory.toAbsolutePath().toString(), "\""
@@ -64,7 +64,7 @@ public class TS_FileZipNativeSevenZip {
                 destinationDirectory.toAbsolutePath().toString(), "\""
         );
         d.ci("unzipFileFlattened", "cmd", cmd);
-        TS_RuntimeUtils.execute(cmd);
+        TS_Process.of(cmd);
     }
 
     public static void unzipDirectoryFlattened(Path zipDirectory) {
@@ -73,6 +73,6 @@ public class TS_FileZipNativeSevenZip {
         batCode.add("cd " + zipDirectory.toAbsolutePath().toString());
         batCode.add("FOR /F \"usebackq\" %%a in (`DIR /s /b *.zip`) do \"" + sevenZipExe.toAbsolutePath().toString() + "\" e %%a");
         d.cr("unzipDirectoryFlattened", "batCode", batCode);
-        TS_RuntimeUtils.runConsoleBAT_readResult(batCode.toString());
+        TS_Process.ofCode(batCode.toString(), TS_Process.CodeType.BAT);
     }
 }
