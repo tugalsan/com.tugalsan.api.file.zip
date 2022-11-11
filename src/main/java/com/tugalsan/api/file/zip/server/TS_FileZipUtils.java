@@ -40,9 +40,11 @@ public class TS_FileZipUtils {
         TS_FileZipNativeSevenZip.unzipDirectoryFlattened(zipDirectory);
     }
 
-    public static void unzipListFlattened(List<Path> sourceZipFiles, Path destinationDirectory) {
+    public static void unzipListFlattened(List<Path> sourceZipFiles, Path destinationDirectory, boolean parallel) {
         d.ci("unzipDirectoryFlattened", sourceZipFiles.size(), destinationDirectory);
-        sourceZipFiles.parallelStream().forEach(zip -> unzipFileFlattened(zip, destinationDirectory));
+        (parallel ? sourceZipFiles.parallelStream() : sourceZipFiles.stream()).forEach(zip -> {
+            unzipFileFlattened(zip, destinationDirectory);
+        });
     }
 
     public static void unzipFile(Path sourceZipFiles, Path destinationDirectory) {
