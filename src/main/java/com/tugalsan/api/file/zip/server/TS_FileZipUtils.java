@@ -28,7 +28,7 @@ public class TS_FileZipUtils {
     }
 
     public static boolean isOSHasDeleteBugAfterUnzip() {
-        return TS_OSUtils.getName().startsWith("windows server 200");
+        return TS_OsPlatformUtils.getName().startsWith("windows server 200");
     }
 
     public static void unzipFileFlattened(Path sourceZipFile, Path destinationDirectory) {
