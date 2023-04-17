@@ -32,7 +32,7 @@ public class TS_FileZipZip4JUtils {
         var zipFile = new ZipFile(targetZipFile.toAbsolutePath().toString());
         if (sourceFiles != null) {
             sourceFiles.stream().forEachOrdered(p -> {
-                TGS_UnSafe.execute(() -> {
+                TGS_UnSafe.run(() -> {
                     if (p == null) {
                         return;
                     }
@@ -42,7 +42,7 @@ public class TS_FileZipZip4JUtils {
         }
         if (sourceDirectories != null) {
             sourceDirectories.stream().forEachOrdered(p -> {
-                TGS_UnSafe.execute(() -> {
+                TGS_UnSafe.run(() -> {
                     if (p == null) {
                         return;
                     }
@@ -53,7 +53,7 @@ public class TS_FileZipZip4JUtils {
     }
 
     public static void unzip(Path sourceZipFile, Path destinationDirectory) {
-        TGS_UnSafe.execute(() -> {
+        TGS_UnSafe.run(() -> {
             d.ci("unzip", sourceZipFile, destinationDirectory);
 //            TS_DirectoryUtils.deleteDirectoryIfExists(destinationDirectory);//DONT!!!
             TS_DirectoryUtils.createDirectoriesIfNotExists(destinationDirectory);
