@@ -6,12 +6,16 @@ import com.tugalsan.api.file.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.os.server.*;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.coronator.client.*;
 
 public class TS_FileZipNativeSevenZip {
 
     final private static TS_Log d = TS_Log.of(TS_FileZipNativeSevenZip.class);
 
-    public static Path sevenZipExe = Path.of("C:\\Program Files\\7-Zip\\7z.exe");
+    public static Path sevenZipExe = TGS_Coronator.of(Path.class)
+            .anoint(val -> Path.of("C:\\Program Files\\7-Zip\\7z.exe"))
+            .anointIf(val -> TS_FileUtils.isExistFile(Path.of("D:\\bin\\7z\\App\\7-Zip64\\7z.exe")), val -> Path.of("D:\\bin\\7z\\App\\7-Zip64\\7z.exe"))
+            .coronate();
 
     public static void zipFile(Path sourceFile, Path targetZipFile) {//"C:\Program Files\7-Zip\7z.exe" a "D:\a\zipne.zip" "D:\b\zipne.txt"
         var cmd = TGS_StringUtils.concat(
