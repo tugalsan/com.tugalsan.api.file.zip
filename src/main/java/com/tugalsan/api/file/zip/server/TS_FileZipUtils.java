@@ -57,14 +57,13 @@ public class TS_FileZipUtils {
 
     public static List<String> getFilePaths(Path sourceZipFile) {
         List<String> list = TGS_ListUtils.of();
-        try ( var fis = new FileInputStream(sourceZipFile.toFile());  var zipIs = new ZipInputStream(new BufferedInputStream(fis));) {
+        try (var fis = new FileInputStream(sourceZipFile.toFile()); var zipIs = new ZipInputStream(new BufferedInputStream(fis));) {
             ZipEntry zEntry;
             while ((zEntry = zipIs.getNextEntry()) != null) {
                 list.add(zEntry.getName());
                 zipIs.closeEntry();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
             return null;
         }
         return list;
