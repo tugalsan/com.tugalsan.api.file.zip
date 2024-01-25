@@ -21,7 +21,7 @@ public class TS_FileZipJDKUtils {
         public void close() {
             TGS_UnSafe.run(() -> zos.close(), e -> TGS_UnSafe.runNothing());
         }
-        private ZipOutputStream zos;
+        private final ZipOutputStream zos;
         final private Path sourceDir;
 
         public zipDirectory_DirectoryVisitor(Path sourceDir, ZipOutputStream zos) {
