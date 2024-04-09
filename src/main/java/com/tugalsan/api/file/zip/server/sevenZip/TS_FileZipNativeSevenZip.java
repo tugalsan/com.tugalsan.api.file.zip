@@ -43,7 +43,7 @@ public class TS_FileZipNativeSevenZip {
 
     public static TGS_Union<Boolean> zipFolder(Path sourceDirectory, Path targetZipFile) {//7z a myzip ./MyFolder/*
         var u_driveLetter = TS_PathUtils.getDriveLetter(targetZipFile);
-        if (u_driveLetter.isError()) {
+        if (u_driveLetter.isExcuse()) {
             return TGS_Union.ofExcuse(u_driveLetter.excuse());
         }
         var driveLetter = u_driveLetter.value();

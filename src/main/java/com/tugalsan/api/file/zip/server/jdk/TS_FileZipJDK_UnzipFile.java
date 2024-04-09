@@ -15,7 +15,7 @@ public class TS_FileZipJDK_UnzipFile {
             ZipEntry zipEntry;
             while ((zipEntry = zis.getNextEntry()) != null) {
                 var u_newFile = newFile(destDir, zipEntry);
-                if (u_newFile.isError()) {
+                if (u_newFile.isExcuse()) {
                     return TGS_Union.ofExcuse(u_newFile.excuse());
                 }
                 var newFile = u_newFile.value();
