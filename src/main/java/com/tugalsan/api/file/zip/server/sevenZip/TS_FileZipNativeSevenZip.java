@@ -7,6 +7,7 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.os.server.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.coronator.client.*;
+import com.tugalsan.api.union.client.TGS_Union;
 
 public class TS_FileZipNativeSevenZip {
 
@@ -40,8 +41,12 @@ public class TS_FileZipNativeSevenZip {
         TS_OsProcess.of(cmd);
     }
 
-    public static void zipFolder(Path sourceDirectory, Path targetZipFile) {//7z a myzip ./MyFolder/*
-        var driveLetter = TS_PathUtils.getDriveLetter(targetZipFile);
+    public static TGS_Union<Boolean> zipFolder(Path sourceDirectory, Path targetZipFile) {//7z a myzip ./MyFolder/*
+        var u_driveLetter = TS_PathUtils.getDriveLetter(targetZipFile);
+        if (u_driveLetter.isError()) {
+            return TGS_Union.ofExcuse(u_driveLetter.excuse());
+        }
+        var driveLetter = u_driveLetter.value();
         var bat = new StringJoiner("\n");
         bat.add(driveLetter + ":");
         bat.add("cd " + targetZipFile.getParent().toAbsolutePath().toString());
@@ -51,6 +56,7 @@ public class TS_FileZipNativeSevenZip {
                 sourceDirectory.toAbsolutePath().toString(), "\\*\""
         ));
         TS_OsProcess.of(driveLetter);
+        return TGS_Union.of(true);
     }
 
     public static void unzip(Path sourceZipFile, Path destinationDirectory) {//"C:\Program Files\7-Zip\7z.exe" x -y "D:\xampp\168063.zip" -o"d:\zip"
