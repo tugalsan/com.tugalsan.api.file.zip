@@ -1,6 +1,7 @@
 package com.tugalsan.api.file.zip.server.jdk;
 
 import com.tugalsan.api.union.client.TGS_Union;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import java.io.*;
 import java.nio.file.*;
 import java.util.zip.*;
@@ -8,7 +9,7 @@ import java.util.zip.*;
 //https://github.com/eugenp/tutorials/blob/master/core-java-modules/core-java-io/src/main/java/com/baeldung/unzip/UnzipFile.java
 public class TS_FileZipJDK_UnzipFile {
 
-    public static TGS_Union<Boolean> unzip(Path fileZip, Path destPath) {
+    public static TGS_UnionExcuse unzip(Path fileZip, Path destPath) {
         var destDir = destPath.toFile();
         var buffer = new byte[1024];
         try (var zis = new ZipInputStream(Files.newInputStream(fileZip))) {
@@ -16,17 +17,17 @@ public class TS_FileZipJDK_UnzipFile {
             while ((zipEntry = zis.getNextEntry()) != null) {
                 var u_newFile = newFile(destDir, zipEntry);
                 if (u_newFile.isExcuse()) {
-                    return TGS_Union.ofExcuse(u_newFile.excuse());
+                    return TGS_UnionExcuse.ofExcuse(u_newFile.excuse());
                 }
                 var newFile = u_newFile.value();
                 if (zipEntry.isDirectory()) {
                     if (!newFile.toFile().mkdirs()) {
-                        return TGS_Union.ofExcuse(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + newFile);
+                        return TGS_UnionExcuse.ofExcuse(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + newFile);
                     }
                 } else {
                     var parent = newFile.toFile().getParentFile();
                     if (!parent.isDirectory() && !parent.mkdirs()) {
-                        return TGS_Union.ofExcuse(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + parent);
+                        return TGS_UnionExcuse.ofExcuse(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + parent);
                     }
 
                     try (var fos = new FileOutputStream(newFile.toFile())) {
@@ -38,9 +39,9 @@ public class TS_FileZipJDK_UnzipFile {
                 }
                 zis.closeEntry();
             }
-            return TGS_Union.of(true);
+            return TGS_UnionExcuse.ofVoid();
         } catch (IOException ex) {
-            return TGS_Union.ofExcuse(ex);
+            return TGS_UnionExcuse.ofExcuse(ex);
         }
     }
 
