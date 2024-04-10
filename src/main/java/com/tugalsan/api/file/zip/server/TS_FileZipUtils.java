@@ -10,7 +10,7 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.os.server.*;
 import com.tugalsan.api.file.zip.server.sevenZip.*;
 import com.tugalsan.api.file.zip.server.zip4j.*;
-import com.tugalsan.api.union.client.TGS_Union;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 
 public class TS_FileZipUtils {
 
@@ -52,7 +52,7 @@ public class TS_FileZipUtils {
         TS_FileZipNativeSevenZip.unzip(sourceZipFiles, destinationDirectory);
     }
 
-    public static TGS_Union<List<Path>> getZipFiles(Path parentDirectory) {
+    public static TGS_UnionExcuse<List<Path>> getZipFiles(Path parentDirectory) {
         return TS_DirectoryUtils.subFiles(parentDirectory, "*.zip", false, false);
     }
 

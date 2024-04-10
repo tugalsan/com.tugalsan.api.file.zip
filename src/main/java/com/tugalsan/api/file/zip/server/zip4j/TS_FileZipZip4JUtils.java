@@ -6,7 +6,7 @@ import net.lingala.zip4j.*;
 import com.tugalsan.api.file.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.list.client.*;
-import com.tugalsan.api.union.client.TGS_UnionExcuse;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 import net.lingala.zip4j.exception.ZipException;
 
 public class TS_FileZipZip4JUtils {
@@ -25,7 +25,7 @@ public class TS_FileZipZip4JUtils {
         zipList(null, TGS_ListUtils.of(sourceDirectory), targetZipFile);
     }
 
-    public static TGS_UnionExcuse zipList(List<Path> sourceFiles, List<Path> sourceDirectories, Path targetZipFile) {
+    public static TGS_UnionExcuseVoid zipList(List<Path> sourceFiles, List<Path> sourceDirectories, Path targetZipFile) {
         d.ci("zipList", sourceFiles, sourceDirectories, targetZipFile);
         var u_createDirectoriesIfNotExists = TS_DirectoryUtils.createDirectoriesIfNotExists(targetZipFile.getParent());
         if (u_createDirectoriesIfNotExists.isExcuse()) {
@@ -44,7 +44,7 @@ public class TS_FileZipZip4JUtils {
                 try {
                     zipFile.addFile(p.toFile());
                 } catch (ZipException ex) {
-                    return TGS_UnionExcuse.ofExcuse(ex);
+                    return TGS_UnionExcuseVoid.ofExcuse(ex);
                 }
             }
         }
@@ -56,23 +56,23 @@ public class TS_FileZipZip4JUtils {
                 try {
                     zipFile.addFolder(p.toFile());
                 } catch (ZipException ex) {
-                    return TGS_UnionExcuse.ofExcuse(ex);
+                    return TGS_UnionExcuseVoid.ofExcuse(ex);
                 }
             }
         }
-        return TGS_UnionExcuse.ofVoid();
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
-    public static TGS_UnionExcuse unzip(Path sourceZipFile, Path destinationDirectory) {
+    public static TGS_UnionExcuseVoid unzip(Path sourceZipFile, Path destinationDirectory) {
         try {
             d.ci("unzip", sourceZipFile, destinationDirectory);
 //            TS_DirectoryUtils.deleteDirectoryIfExists(destinationDirectory);//DONT!!!
             TS_DirectoryUtils.createDirectoriesIfNotExists(destinationDirectory);
             var zipFile = new ZipFile(sourceZipFile.toAbsolutePath().toString());
             zipFile.extractAll(destinationDirectory.toAbsolutePath().toString());
-            return TGS_UnionExcuse.ofVoid();
+            return TGS_UnionExcuseVoid.ofVoid();
         } catch (ZipException ex) {
-            return TGS_UnionExcuse.ofExcuse(ex);
+            return TGS_UnionExcuseVoid.ofExcuse(ex);
         }
     }
 }
