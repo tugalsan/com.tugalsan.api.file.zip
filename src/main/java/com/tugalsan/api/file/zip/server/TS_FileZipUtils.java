@@ -11,45 +11,49 @@ import com.tugalsan.api.os.server.*;
 import com.tugalsan.api.file.zip.server.sevenZip.*;
 import com.tugalsan.api.file.zip.server.zip4j.*;
 import com.tugalsan.api.union.client.TGS_UnionExcuse;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 
 public class TS_FileZipUtils {
 
     final private static TS_Log d = TS_Log.of(TS_FileZipUtils.class);
 
-    public static void zipFile(Path sourceFile, Path targetZipFile) {
-        TS_FileZipZip4JUtils.zipFile(sourceFile, targetZipFile);
+    public static TGS_UnionExcuseVoid zipFile(Path sourceFile, Path targetZipFile) {
+        return TS_FileZipZip4JUtils.zipFile(sourceFile, targetZipFile);
     }
 
-    public static void zipFolder(Path sourceDirectory, Path targetZipFile) {
-        TS_FileZipZip4JUtils.zipFolder(sourceDirectory, targetZipFile);
+    public static TGS_UnionExcuseVoid zipFolder(Path sourceDirectory, Path targetZipFile) {
+        return TS_FileZipZip4JUtils.zipFolder(sourceDirectory, targetZipFile);
     }
 
-    public static void zipList(List<Path> sourceFiles, Path targetZipFile) {
-        TS_FileZipZip4JUtils.zipList(sourceFiles, null, targetZipFile);
+    public static TGS_UnionExcuseVoid zipList(List<Path> sourceFiles, Path targetZipFile) {
+        return TS_FileZipZip4JUtils.zipList(sourceFiles, null, targetZipFile);
     }
 
     public static boolean isOSHasDeleteBugAfterUnzip() {
         return TS_OsPlatformUtils.getName().startsWith("windows server 200");
     }
 
-    public static void unzipFileFlattened(Path sourceZipFile, Path destinationDirectory) {
+    public static TGS_UnionExcuse<TS_OsProcess> unzipFileFlattened(Path sourceZipFile, Path destinationDirectory) {
         d.ci("unzipFileFlattened", sourceZipFile, destinationDirectory);
-        TS_FileZipNativeSevenZip.unzipFileFlattened(sourceZipFile, destinationDirectory);
+        return TS_FileZipNativeSevenZip.unzipFileFlattened(sourceZipFile, destinationDirectory);
     }
 
-    public static void unzipDirectoryFlattened(Path zipDirectory) {
-        TS_FileZipNativeSevenZip.unzipDirectoryFlattened(zipDirectory);
+    public static TGS_UnionExcuse<TS_OsProcess> unzipDirectoryFlattened(Path zipDirectory) {
+        return TS_FileZipNativeSevenZip.unzipDirectoryFlattened(zipDirectory);
     }
 
-    public static void unzipListFlattened(List<Path> sourceZipFiles, Path destinationDirectory, boolean parallel) {
-        d.ci("unzipDirectoryFlattened", sourceZipFiles.size(), destinationDirectory);
-        (parallel ? sourceZipFiles.parallelStream() : sourceZipFiles.stream()).forEach(zip -> {
-            unzipFileFlattened(zip, destinationDirectory);
-        });
+    public static TGS_UnionExcuseVoid unzipListFlattened(List<Path> sourceZipFiles, Path destinationDirectory) {
+        for (var zipFile : sourceZipFiles) {
+            var u = unzipFileFlattened(zipFile, destinationDirectory);
+            if (u.isExcuse()) {
+                return u.toExcuseVoid();
+            }
+        }
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
-    public static void unzipFile(Path sourceZipFiles, Path destinationDirectory) {
-        TS_FileZipNativeSevenZip.unzip(sourceZipFiles, destinationDirectory);
+    public static TGS_UnionExcuse<TS_OsProcess> unzipFile(Path sourceZipFiles, Path destinationDirectory) {
+        return TS_FileZipNativeSevenZip.unzip(sourceZipFiles, destinationDirectory);
     }
 
     public static TGS_UnionExcuse<List<Path>> getZipFiles(Path parentDirectory) {

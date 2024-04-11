@@ -13,16 +13,16 @@ public class TS_FileZipZip4JUtils {
 
     final private static TS_Log d = TS_Log.of(TS_FileZipZip4JUtils.class);
 
-    public static void zipFile(Path sourceFile, Path targetZipFile) {
+    public static TGS_UnionExcuseVoid zipFile(Path sourceFile, Path targetZipFile) {
         d.ci("zipFile", sourceFile, targetZipFile);
         TS_DirectoryUtils.createDirectoriesIfNotExists(targetZipFile.getParent());
-        zipList(TGS_ListUtils.of(sourceFile), null, targetZipFile);
+       return zipList(TGS_ListUtils.of(sourceFile), null, targetZipFile);
     }
 
-    public static void zipFolder(Path sourceDirectory, Path targetZipFile) {
+    public static TGS_UnionExcuseVoid zipFolder(Path sourceDirectory, Path targetZipFile) {
         d.ci("zipFolder", sourceDirectory, targetZipFile);
         TS_DirectoryUtils.createDirectoriesIfNotExists(targetZipFile.getParent());
-        zipList(null, TGS_ListUtils.of(sourceDirectory), targetZipFile);
+        return zipList(null, TGS_ListUtils.of(sourceDirectory), targetZipFile);
     }
 
     public static TGS_UnionExcuseVoid zipList(List<Path> sourceFiles, List<Path> sourceDirectories, Path targetZipFile) {

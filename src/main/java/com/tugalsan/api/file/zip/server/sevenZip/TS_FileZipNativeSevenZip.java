@@ -19,17 +19,17 @@ public class TS_FileZipNativeSevenZip {
             .anointIf(val -> TS_FileUtils.isExistFile(Path.of("D:\\bin\\7z\\App\\7-Zip64\\7z.exe")), val -> Path.of("D:\\bin\\7z\\App\\7-Zip64\\7z.exe"))
             .coronate();
 
-    public static void zipFile(Path sourceFile, Path targetZipFile) {//"C:\Program Files\7-Zip\7z.exe" a "D:\a\zipne.zip" "D:\b\zipne.txt"
+    public static TGS_UnionExcuse<TS_OsProcess> zipFile(Path sourceFile, Path targetZipFile) {//"C:\Program Files\7-Zip\7z.exe" a "D:\a\zipne.zip" "D:\b\zipne.txt"
         var cmd = TGS_StringUtils.concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" a -tzip \"",
                 targetZipFile.toAbsolutePath().toString(), "\" \"",
                 sourceFile.toAbsolutePath().toString(), "\""
         );
         d.ci("zipFile", "cmd", cmd);
-        TS_OsProcess.of(cmd);
+        return TS_OsProcess.of(cmd).toUnion();
     }
 
-    public static void zipList(List<Path> sourceFiles, Path targetZipFile) {//7z a -tzip DestinyTest.zip destiny1.txt destiny4.txt destiny6.txt
+    public static TGS_UnionExcuse<TS_OsProcess> zipList(List<Path> sourceFiles, Path targetZipFile) {//7z a -tzip DestinyTest.zip destiny1.txt destiny4.txt destiny6.txt
         var sb = new StringBuilder();
         sourceFiles.stream().forEachOrdered(file -> {
             sb.append(" \"").append(file.toAbsolutePath().toString()).append("\"");
@@ -39,13 +39,13 @@ public class TS_FileZipNativeSevenZip {
                 targetZipFile.toAbsolutePath().toString(), "\" ", sb.toString()
         );
         d.ci("zipFile", "cmd", cmd);
-        TS_OsProcess.of(cmd);
+        return TS_OsProcess.of(cmd).toUnion();
     }
 
-    public static TGS_UnionExcuseVoid zipFolder(Path sourceDirectory, Path targetZipFile) {//7z a myzip ./MyFolder/*
+    public static TGS_UnionExcuse<TS_OsProcess> zipFolder(Path sourceDirectory, Path targetZipFile) {//7z a myzip ./MyFolder/*
         var u_driveLetter = TS_PathUtils.getDriveLetter(targetZipFile);
         if (u_driveLetter.isExcuse()) {
-            return TGS_UnionExcuseVoid.ofExcuse(u_driveLetter.excuse());
+            return TGS_UnionExcuse.ofExcuse(u_driveLetter.excuse());
         }
         var driveLetter = u_driveLetter.value();
         var bat = new StringJoiner("\n");
@@ -56,37 +56,33 @@ public class TS_FileZipNativeSevenZip {
                 targetZipFile.toAbsolutePath().toString(), "\"",
                 sourceDirectory.toAbsolutePath().toString(), "\\*\""
         ));
-        var process = TS_OsProcess.of(driveLetter);
-        if (!process.exitValueOk()) {
-            return TGS_UnionExcuseVoid.ofExcuse(d.className, "zipFolder", "Exit value is %d".formatted(process.exitValue));
-        }
-        return TGS_UnionExcuseVoid.ofVoid();
+        return TS_OsProcess.of(driveLetter).toUnion();
     }
 
-    public static void unzip(Path sourceZipFile, Path destinationDirectory) {//"C:\Program Files\7-Zip\7z.exe" x -y "D:\xampp\168063.zip" -o"d:\zip"
-        TS_OsProcess.of(TGS_StringUtils.concat(
+    public static TGS_UnionExcuse<TS_OsProcess> unzip(Path sourceZipFile, Path destinationDirectory) {//"C:\Program Files\7-Zip\7z.exe" x -y "D:\xampp\168063.zip" -o"d:\zip"
+        return TS_OsProcess.of(TGS_StringUtils.concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" x -y \"",
                 sourceZipFile.toAbsolutePath().toString(), "\" -o\"",
                 destinationDirectory.toAbsolutePath().toString(), "\""
-        ));
+        )).toUnion();
     }
 
-    public static void unzipFileFlattened(Path sourceZipFile, Path destinationDirectory) {//"C:\Program Files\7-Zip\7z.exe" x -y "D:\xampp\168063.zip" -o"d:\zip"
+    public static TGS_UnionExcuse<TS_OsProcess> unzipFileFlattened(Path sourceZipFile, Path destinationDirectory) {//"C:\Program Files\7-Zip\7z.exe" x -y "D:\xampp\168063.zip" -o"d:\zip"
         var cmd = TGS_StringUtils.concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" e -y \"",
                 sourceZipFile.toAbsolutePath().toString(), "\" -o\"",
                 destinationDirectory.toAbsolutePath().toString(), "\""
         );
         d.ci("unzipFileFlattened", "cmd", cmd);
-        TS_OsProcess.of(cmd);
+        return TS_OsProcess.of(cmd).toUnion();
     }
 
-    public static void unzipDirectoryFlattened(Path zipDirectory) {
+    public static TGS_UnionExcuse<TS_OsProcess> unzipDirectoryFlattened(Path zipDirectory) {
         var batCode = new StringJoiner("\n");
         batCode.add(TS_PathUtils.getDriveLetter(zipDirectory) + ":");
         batCode.add("cd " + zipDirectory.toAbsolutePath().toString());
         batCode.add("FOR /F \"usebackq\" %%a in (`DIR /s /b *.zip`) do \"" + sevenZipExe.toAbsolutePath().toString() + "\" e %%a");
         d.cr("unzipDirectoryFlattened", "batCode", batCode);
-        TS_OsProcess.ofCode(batCode.toString(), TS_OsProcess.CodeType.BAT);
+        return TS_OsProcess.ofCode(batCode.toString(), TS_OsProcess.CodeType.BAT).toUnion();
     }
 }
