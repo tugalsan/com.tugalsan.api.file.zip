@@ -18,7 +18,7 @@ public class TS_FileZipNativeSevenZip {
             .coronate();
 
     public static void zipFile(Path sourceFile, Path targetZipFile) {//"C:\Program Files\7-Zip\7z.exe" a "D:\a\zipne.zip" "D:\b\zipne.txt"
-        var cmd = TGS_StringUtils.concat(
+        var cmd = TGS_StringUtils.cmn().concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" a -tzip \"",
                 targetZipFile.toAbsolutePath().toString(), "\" \"",
                 sourceFile.toAbsolutePath().toString(), "\""
@@ -32,7 +32,7 @@ public class TS_FileZipNativeSevenZip {
         sourceFiles.stream().forEachOrdered(file -> {
             sb.append(" \"").append(file.toAbsolutePath().toString()).append("\"");
         });
-        var cmd = TGS_StringUtils.concat(
+        var cmd = TGS_StringUtils.cmn().concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" a -tzip \"",
                 targetZipFile.toAbsolutePath().toString(), "\" ", sb.toString()
         );
@@ -45,7 +45,7 @@ public class TS_FileZipNativeSevenZip {
         var bat = new StringJoiner("\n");
         bat.add(driveLetter + ":");
         bat.add("cd " + targetZipFile.getParent().toAbsolutePath().toString());
-        bat.add(TGS_StringUtils.concat(
+        bat.add(TGS_StringUtils.cmn().concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" a -tzip \"",
                 targetZipFile.toAbsolutePath().toString(), "\"",
                 sourceDirectory.toAbsolutePath().toString(), "\\*\""
@@ -54,7 +54,7 @@ public class TS_FileZipNativeSevenZip {
     }
 
     public static void unzip(Path sourceZipFile, Path destinationDirectory) {//"C:\Program Files\7-Zip\7z.exe" x -y "D:\xampp\168063.zip" -o"d:\zip"
-        TS_OsProcess.of(TGS_StringUtils.concat(
+        TS_OsProcess.of(TGS_StringUtils.cmn().concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" x -y \"",
                 sourceZipFile.toAbsolutePath().toString(), "\" -o\"",
                 destinationDirectory.toAbsolutePath().toString(), "\""
@@ -62,7 +62,7 @@ public class TS_FileZipNativeSevenZip {
     }
 
     public static void unzipFileFlattened(Path sourceZipFile, Path destinationDirectory) {//"C:\Program Files\7-Zip\7z.exe" x -y "D:\xampp\168063.zip" -o"d:\zip"
-        var cmd = TGS_StringUtils.concat(
+        var cmd = TGS_StringUtils.cmn().concat(
                 "\"", sevenZipExe.toAbsolutePath().toString(), "\" e -y \"",
                 sourceZipFile.toAbsolutePath().toString(), "\" -o\"",
                 destinationDirectory.toAbsolutePath().toString(), "\""
