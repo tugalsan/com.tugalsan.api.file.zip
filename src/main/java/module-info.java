@@ -4,7 +4,7 @@ module com.tugalsan.api.file.zip {
     requires com.tugalsan.api.unsafe;
     requires com.tugalsan.api.file;
     
-    requires com.tugalsan.api.callable;
+    requires com.tugalsan.api.function;
     
     
     requires com.tugalsan.api.list;
