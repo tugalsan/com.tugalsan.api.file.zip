@@ -10,6 +10,7 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.os.server.*;
 import com.tugalsan.api.file.zip.server.sevenZip.*;
 import com.tugalsan.api.file.zip.server.zip4j.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 
 public class TS_FileZipUtils {
 
@@ -23,8 +24,8 @@ public class TS_FileZipUtils {
         TS_FileZipZip4JUtils.zipFolder(sourceDirectory, targetZipFile);
     }
 
-    public static void zipList(List<Path> sourceFiles, Path targetZipFile) {
-        TS_FileZipZip4JUtils.zipList(sourceFiles, null, targetZipFile);
+    public static TGS_UnionExcuseVoid zipList(List<Path> sourceFiles, Path targetZipFile) {
+        return TS_FileZipZip4JUtils.zipList(sourceFiles, null, targetZipFile);
     }
 
     public static boolean isOSHasDeleteBugAfterUnzip() {
