@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.zip.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.file.server.*;
+import com.tugalsan.api.function.client.TGS_Func;
 import com.tugalsan.api.unsafe.client.*;
 
 @Deprecated
@@ -19,7 +20,7 @@ public class TS_FileZipJDKUtils {
 
         @Override
         public void close() {
-            TGS_UnSafe.run(() -> zos.close(), e -> TGS_UnSafe.runNothing());
+            TGS_UnSafe.run(() -> zos.close(), e -> TGS_Func.empty.run());
         }
         private final ZipOutputStream zos;
         final private Path sourceDir;
