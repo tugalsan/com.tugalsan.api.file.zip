@@ -6,6 +6,7 @@ import net.lingala.zip4j.*;
 import com.tugalsan.api.file.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.list.client.*;
+import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 import com.tugalsan.api.unsafe.client.*;
 
@@ -13,19 +14,19 @@ public class TS_FileZipZip4JUtils {
 
     final private static TS_Log d = TS_Log.of(TS_FileZipZip4JUtils.class);
 
-    public static void zipFile(Path sourceFile, Path targetZipFile) {
+    public static void zipFile(TS_ThreadSyncTrigger servletKillTrigger, Path sourceFile, Path targetZipFile) {
         d.ci("zipFile", sourceFile, targetZipFile);
         TS_DirectoryUtils.createDirectoriesIfNotExists(targetZipFile.getParent());
-        zipList(TGS_ListUtils.of(sourceFile), null, targetZipFile);
+        zipList(servletKillTrigger, TGS_ListUtils.of(sourceFile), null, targetZipFile);
     }
 
-    public static void zipFolder(Path sourceDirectory, Path targetZipFile) {
+    public static void zipFolder(TS_ThreadSyncTrigger servletKillTrigger, Path sourceDirectory, Path targetZipFile) {
         d.ci("zipFolder", sourceDirectory, targetZipFile);
         TS_DirectoryUtils.createDirectoriesIfNotExists(targetZipFile.getParent());
-        zipList(null, TGS_ListUtils.of(sourceDirectory), targetZipFile);
+        zipList(servletKillTrigger, null, TGS_ListUtils.of(sourceDirectory), targetZipFile);
     }
 
-    public static TGS_UnionExcuseVoid zipList(List<Path> sourceFiles, List<Path> sourceDirectories, Path targetZipFile) {
+    public static TGS_UnionExcuseVoid zipList(TS_ThreadSyncTrigger servletKillTrigger, List<Path> sourceFiles, List<Path> sourceDirectories, Path targetZipFile) {
         return TGS_UnSafe.call(() -> {
             d.ci("zipList", sourceFiles, sourceDirectories, targetZipFile);
             TS_DirectoryUtils.createDirectoriesIfNotExists(targetZipFile.getParent());
@@ -33,6 +34,9 @@ public class TS_FileZipZip4JUtils {
             var zipFile = new ZipFile(targetZipFile.toAbsolutePath().toString());
             if (sourceFiles != null) {
                 sourceFiles.stream().forEachOrdered(p -> {
+                    if (servletKillTrigger.hasTriggered()) {
+                        return;
+                    }
                     TGS_UnSafe.run(() -> {
                         if (p == null) {
                             return;
@@ -43,6 +47,9 @@ public class TS_FileZipZip4JUtils {
             }
             if (sourceDirectories != null) {
                 sourceDirectories.stream().forEachOrdered(p -> {
+                    if (servletKillTrigger.hasTriggered()) {
+                        return;
+                    }
                     TGS_UnSafe.run(() -> {
                         if (p == null) {
                             return;
