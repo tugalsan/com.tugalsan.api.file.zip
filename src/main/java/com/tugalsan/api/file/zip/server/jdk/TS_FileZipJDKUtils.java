@@ -49,7 +49,7 @@ public class TS_FileZipJDKUtils {
         TGS_FuncMTCEUtils.run(() -> {
             d.cr("zipDirectory", sourceDirectory.toAbsolutePath().toString(), targetZipFile.toAbsolutePath().toString());
             TS_FileUtils.deleteFileIfExists(targetZipFile);
-            try ( var fos = Files.newOutputStream(targetZipFile);  var zos = new ZipOutputStream(fos);  var zdv = new zipDirectory_DirectoryVisitor(sourceDirectory, zos)) {
+            try (var fos = Files.newOutputStream(targetZipFile); var zos = new ZipOutputStream(fos); var zdv = new zipDirectory_DirectoryVisitor(sourceDirectory, zos)) {
                 Files.walkFileTree(sourceDirectory, zdv);
             }
         });
@@ -59,7 +59,7 @@ public class TS_FileZipJDKUtils {
     public static void zipFiles(Path[] sourceFiles, Path targetZipFile) {
         TGS_FuncMTCEUtils.run(() -> {
             d.cr("zipFiles", sourceFiles, targetZipFile.toAbsolutePath().toString());
-            try ( var fos = Files.newOutputStream(targetZipFile);  var zos = new ZipOutputStream(fos);) {
+            try (var fos = Files.newOutputStream(targetZipFile); var zos = new ZipOutputStream(fos);) {
                 Arrays.stream(sourceFiles).forEachOrdered(sourceFile -> zipFiles_for(sourceFile, zos));
             }
         });
@@ -80,7 +80,7 @@ public class TS_FileZipJDKUtils {
         TGS_FuncMTCEUtils.run(() -> {
             d.ci("unzipFile", zipFile.toAbsolutePath().toString(), targetDirectory.toAbsolutePath().toString());
             TS_DirectoryUtils.createDirectoriesIfNotExists(targetDirectory);
-            try ( var zipInputStream = new ZipInputStream(Files.newInputStream(zipFile))) {
+            try (var zipInputStream = new ZipInputStream(Files.newInputStream(zipFile))) {
                 ZipEntry entry;
                 while ((entry = zipInputStream.getNextEntry()) != null) {
                     var toPath = targetDirectory.resolve(entry.getName());
@@ -99,13 +99,13 @@ public class TS_FileZipJDKUtils {
     public static void unzipURL(URL zipURL, Path targetDirectory) {
         TGS_FuncMTCEUtils.run(() -> {
             d.cr("unzipFile", zipURL.toExternalForm(), targetDirectory.toAbsolutePath().toString());
-            try ( var zipInputStream = new ZipInputStream(Channels.newInputStream(Channels.newChannel(zipURL.openStream())))) {
+            try (var zipInputStream = new ZipInputStream(Channels.newInputStream(Channels.newChannel(zipURL.openStream())))) {
                 ZipEntry entry;
                 while ((entry = zipInputStream.getNextEntry()) != null) {
                     var toPath = targetDirectory.resolve(entry.getName());
                     if (entry.isDirectory()) {
                         Files.createDirectory(toPath);
-                    } else try ( var fileChannel = FileChannel.open(toPath, StandardOpenOption.WRITE, StandardOpenOption.CREATE/*, DELETE_ON_CLOSE*/);  var nc = Channels.newChannel(zipInputStream)) {
+                    } else try (var fileChannel = FileChannel.open(toPath, StandardOpenOption.WRITE, StandardOpenOption.CREATE/*, DELETE_ON_CLOSE*/); var nc = Channels.newChannel(zipInputStream)) {
                         fileChannel.transferFrom(nc, 0, Long.MAX_VALUE);
                     }
                     zipInputStream.closeEntry();
@@ -114,4 +114,21 @@ public class TS_FileZipJDKUtils {
         });
     }
 
+    //TODO_MORE @ https://www.baeldung.com/java-compress-and-uncompress
+    public static void zipFile(Path inputFile, Path zipFile) {
+        TGS_FuncMTCEUtils.run(() -> {
+            var bytes = new byte[1024];
+            int length;
+            try (var fos = Files.newOutputStream(zipFile)) {
+                try (var zipOut = new ZipOutputStream(fos)) {
+                    try (var fis = Files.newInputStream(inputFile)) {
+                        zipOut.putNextEntry(new ZipEntry(inputFile.toFile().getName()));
+                        while ((length = fis.read(bytes)) >= 0) {
+                            zipOut.write(bytes, 0, length);
+                        }
+                    }
+                }
+            }
+        });
+    }
 }
