@@ -1,8 +1,8 @@
 package com.tugalsan.api.file.zip.server.jdk;
 
 
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUUtils;
 import java.io.*;
 import java.nio.file.*;
 import java.util.zip.*;
@@ -11,7 +11,7 @@ import java.util.zip.*;
 public class TS_FileZipJDK_UnzipFile {
 
     public static void unzip(Path fileZip, Path destPath) {
-        TGS_FuncMTCEUtils.run(() -> {
+        TGS_FuncMTCUtils.run(() -> {
             var destDir = destPath.toFile();
             var buffer = new byte[1024];
             try ( var zis = new ZipInputStream(Files.newInputStream(fileZip))) {
@@ -20,12 +20,12 @@ public class TS_FileZipJDK_UnzipFile {
                     var newFile = newFile(destDir, zipEntry);
                     if (zipEntry.isDirectory()) {
                         if (!newFile.mkdirs()) {
-                            TGS_FuncMTUCEUtils.thrw(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + newFile);
+                            TGS_FuncMTUUtils.thrw(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + newFile);
                         }
                     } else {
                         var parent = newFile.getParentFile();
                         if (!parent.isDirectory() && !parent.mkdirs()) {
-                            TGS_FuncMTUCEUtils.thrw(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + parent);
+                            TGS_FuncMTUUtils.thrw(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + parent);
                         }
 
                         try ( var fos = new FileOutputStream(newFile)) {
@@ -45,12 +45,12 @@ public class TS_FileZipJDK_UnzipFile {
      * @see https://snyk.io/research/zip-slip-vulnerability
      */
     public static File newFile(File destinationDir, ZipEntry zipEntry) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             var destFile = new File(destinationDir, zipEntry.getName());
             var destDirPath = destinationDir.getCanonicalPath();
             var destFilePath = destFile.getCanonicalPath();
             if (!destFilePath.startsWith(destDirPath + File.separator)) {
-                TGS_FuncMTUCEUtils.thrw(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "newFile", "Entry is outside of the target dir: " + zipEntry.getName());
+                TGS_FuncMTUUtils.thrw(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "newFile", "Entry is outside of the target dir: " + zipEntry.getName());
             }
             return destFile;
         });

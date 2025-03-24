@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.zip.server.sevenZip;
 
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCEEffectivelyFinal;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUEffectivelyFinal;
 import java.nio.file.*;
 import java.util.*;
 import com.tugalsan.api.file.server.*;
@@ -12,7 +12,7 @@ public class TS_FileZipNativeSevenZip {
 
     final private static TS_Log d = TS_Log.of(TS_FileZipNativeSevenZip.class);
 
-    public static Path sevenZipExe = TGS_FuncMTUCEEffectivelyFinal.of(Path.class)
+    public static Path sevenZipExe = TGS_FuncMTUEffectivelyFinal.of(Path.class)
             .anoint(val -> Path.of("C:\\Program Files\\7-Zip\\7z.exe"))
             .anointIf(val -> TS_FileUtils.isExistFile(Path.of("D:\\bin\\7z\\App\\7-Zip64\\7z.exe")), val -> Path.of("D:\\bin\\7z\\App\\7-Zip64\\7z.exe"))
             .coronate();

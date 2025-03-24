@@ -4,7 +4,7 @@ import java.nio.file.*;
 import java.util.*;
 import net.lingala.zip4j.*;
 import com.tugalsan.api.file.server.*;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
@@ -28,7 +28,7 @@ public class TS_FileZipZip4JUtils {
     }
 
     public static TGS_UnionExcuseVoid zipList(TS_ThreadSyncTrigger servletKillTrigger, List<Path> sourceFiles, List<Path> sourceDirectories, Path targetZipFile) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             d.ci("zipList", sourceFiles, sourceDirectories, targetZipFile);
             TS_DirectoryUtils.createDirectoriesIfNotExists(targetZipFile.getParent());
             TS_FileUtils.deleteFileIfExists(targetZipFile);
@@ -38,7 +38,7 @@ public class TS_FileZipZip4JUtils {
                     if (servletKillTrigger.hasTriggered()) {
                         return;
                     }
-                    TGS_FuncMTCEUtils.run(() -> {
+                    TGS_FuncMTCUtils.run(() -> {
                         if (p == null) {
                             return;
                         }
@@ -51,7 +51,7 @@ public class TS_FileZipZip4JUtils {
                     if (servletKillTrigger.hasTriggered()) {
                         return;
                     }
-                    TGS_FuncMTCEUtils.run(() -> {
+                    TGS_FuncMTCUtils.run(() -> {
                         if (p == null) {
                             return;
                         }
@@ -64,7 +64,7 @@ public class TS_FileZipZip4JUtils {
     }
 
     public static void unzip(Path sourceZipFile, Path destinationDirectory) {
-        TGS_FuncMTCEUtils.run(() -> {
+        TGS_FuncMTCUtils.run(() -> {
             d.ci("unzip", sourceZipFile, destinationDirectory);
 //            TS_DirectoryUtils.deleteDirectoryIfExists(destinationDirectory);//DONT!!!
             TS_DirectoryUtils.createDirectoriesIfNotExists(destinationDirectory);
