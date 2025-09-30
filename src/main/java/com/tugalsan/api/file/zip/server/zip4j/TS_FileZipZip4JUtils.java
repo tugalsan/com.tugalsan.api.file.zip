@@ -1,15 +1,14 @@
 package com.tugalsan.api.file.zip.server.zip4j;
 
+import module com.tugalsan.api.file;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.list;
+import module com.tugalsan.api.thread;
+import module com.tugalsan.api.union;
 import java.nio.file.*;
 import java.util.*;
 import net.lingala.zip4j.*;
-import com.tugalsan.api.file.server.*;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.list.client.*;
-import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
-import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
-
 
 public class TS_FileZipZip4JUtils {
 

@@ -1,12 +1,12 @@
 package com.tugalsan.api.file.zip.server.sevenZip;
 
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUEffectivelyFinal;
+import module com.tugalsan.api.file;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.os;
+import module com.tugalsan.api.string;
+import module com.tugalsan.api.function;
 import java.nio.file.*;
 import java.util.*;
-import com.tugalsan.api.file.server.*;
-import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.os.server.*;
-import com.tugalsan.api.string.client.*;
 
 public class TS_FileZipNativeSevenZip {
 

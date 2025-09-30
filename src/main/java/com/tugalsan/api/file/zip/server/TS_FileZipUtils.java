@@ -1,18 +1,18 @@
 package com.tugalsan.api.file.zip.server;
 
+import module com.tugalsan.api.file;
+import module com.tugalsan.api.list;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.os;
+import module com.tugalsan.api.thread;
+import module com.tugalsan.api.union;
+import com.tugalsan.api.file.zip.server.jdk.TS_FileZipJDKUtils;
+import com.tugalsan.api.file.zip.server.sevenZip.TS_FileZipNativeSevenZip;
+import com.tugalsan.api.file.zip.server.zip4j.TS_FileZipZip4JUtils;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.zip.*;
-import com.tugalsan.api.file.server.*;
-import com.tugalsan.api.file.zip.server.jdk.TS_FileZipJDKUtils;
-import com.tugalsan.api.list.client.*;
-import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.os.server.*;
-import com.tugalsan.api.file.zip.server.sevenZip.*;
-import com.tugalsan.api.file.zip.server.zip4j.*;
-import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
-import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 
 public class TS_FileZipUtils {
 

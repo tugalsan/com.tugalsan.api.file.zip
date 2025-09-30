@@ -1,16 +1,14 @@
 package com.tugalsan.api.file.zip.server.jdk;
 
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.file;
+import module com.tugalsan.api.function;
 import java.net.*;
 import java.nio.channels.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.zip.*;
-import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.file.server.*;
-
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 
 @Deprecated
 public class TS_FileZipJDKUtils {

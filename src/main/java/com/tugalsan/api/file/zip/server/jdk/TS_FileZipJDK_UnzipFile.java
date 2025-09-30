@@ -1,8 +1,6 @@
 package com.tugalsan.api.file.zip.server.jdk;
 
-
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUUtils;
+import module com.tugalsan.api.function;
 import java.io.*;
 import java.nio.file.*;
 import java.util.zip.*;
@@ -14,7 +12,7 @@ public class TS_FileZipJDK_UnzipFile {
         TGS_FuncMTCUtils.run(() -> {
             var destDir = destPath.toFile();
             var buffer = new byte[1024];
-            try ( var zis = new ZipInputStream(Files.newInputStream(fileZip))) {
+            try (var zis = new ZipInputStream(Files.newInputStream(fileZip))) {
                 ZipEntry zipEntry;
                 while ((zipEntry = zis.getNextEntry()) != null) {
                     var newFile = newFile(destDir, zipEntry);
@@ -28,7 +26,7 @@ public class TS_FileZipJDK_UnzipFile {
                             TGS_FuncMTUUtils.thrw(TS_FileZipJDK_UnzipFile.class.getSimpleName(), "unzip", "Failed to create directory " + parent);
                         }
 
-                        try ( var fos = new FileOutputStream(newFile)) {
+                        try (var fos = new FileOutputStream(newFile)) {
                             int len;
                             while ((len = zis.read(buffer)) > 0) {
                                 fos.write(buffer, 0, len);
