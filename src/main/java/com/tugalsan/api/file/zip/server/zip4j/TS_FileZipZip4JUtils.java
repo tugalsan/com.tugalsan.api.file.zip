@@ -6,9 +6,9 @@ import module com.tugalsan.api.log;
 import module com.tugalsan.api.list;
 import module com.tugalsan.api.thread;
 import module com.tugalsan.api.union;
+import module zip4j;
 import java.nio.file.*;
 import java.util.*;
-import net.lingala.zip4j.*;
 
 public class TS_FileZipZip4JUtils {
 
